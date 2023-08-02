@@ -5,12 +5,16 @@ export type ResourceNameType<TPermission extends Permissions> = keyof TPermissio
 
 // each key of resource is a resource name
 export type PermissionType<TPermission extends Permissions> = {
-  [k in keyof TPermission]: k extends string ? `${k}.${TPermission[k][number]}` : never
+  [k in keyof TPermission]: k extends string ? `${k}.${TPermission[k][number]}` | `${k}.*` : never
 }[keyof TPermission]
+
+export type PermissionUnionType<TPermission extends Permissions> =
+  | readonly PermissionType<TPermission>[]
+  | '*'
 
 export type RoleType<TKey extends string, TPermission extends Permissions> = Record<
   TKey,
-  readonly PermissionType<TPermission>[]
+  PermissionUnionType<TPermission>
 >
 
 export type RolePermissionType<TPermission extends Permissions> =
@@ -108,11 +112,23 @@ export function createIdentity<
       const key = `${policy.name}.${role}`
       allPerm[key] = new Set()
       const permissions = policy.roles[role as TRoleKey]
-      permissions.forEach((permission) => {
-        const fullName = `${policy.name}.${permission}`
-        allPermissions.push(fullName as AllPermissionType<TPolicies>)
-        allPerm[key].add(fullName)
-      })
+      if (permissions === '*') {
+        Object.keys(policy.permissions).forEach((permission) => {
+          policy.permissions[permission].forEach((p) => {
+            allPerm[key].add(`${policy.name}.${permission}.${p}`)
+          })
+        })
+      } else {
+        permissions.forEach((permissions) => {
+          if (permissions.endsWith('.*')) {
+            policy.permissions[permissions.replace('.*', '')].forEach((p) => {
+              allPerm[key].add(`${policy.name}.${permissions.replace('.*', '')}.${p}`)
+            })
+            return
+          }
+          allPerm[key].add(`${policy.name}.${permissions}`)
+        })
+      }
     })
   })
 

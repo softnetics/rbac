@@ -23,6 +23,23 @@ const policy = createPolicy({
 permissions are defined as a map of resource to actions
 roles are defined as a map of role to permissions
 
+you also can use * to match all resources and actions
+
+```ts
+createPolicy({
+  name: 'todo',
+  permissions: {
+    todo: ['create', 'read', 'update', 'delete'],
+    comment: ['create', 'read', 'delete'],
+  },
+  roles: {
+    viewer: ['todo.read', 'comment.read'],
+    editor: ['todo.*', 'comment.delete'],
+    admin: '*',
+  },
+})
+```
+
 create a identity
 
 ```ts
