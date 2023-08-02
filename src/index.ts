@@ -100,13 +100,18 @@ export function createIdentity<
   const table: Record<string, Record<string, boolean>> = {}
   const allPerm: Record<string, Set<string>> = {}
 
+  const identityList = Object.keys(table) as TRole[]
+  const allPermissions: AllPermissionType<TPolicies>[] = []
+
   policies.forEach((policy) => {
     Object.keys(policy.roles).forEach((role) => {
       const key = `${policy.name}.${role}`
       allPerm[key] = new Set()
       const permissions = policy.roles[role as TRoleKey]
       permissions.forEach((permission) => {
-        allPerm[key].add(`${policy.name}.${permission}`)
+        const fullName = `${policy.name}.${permission}`
+        allPermissions.push(fullName as AllPermissionType<TPolicies>)
+        allPerm[key].add(fullName)
       })
     })
   })
@@ -129,5 +134,5 @@ export function createIdentity<
     })
   }
 
-  return { enforce }
+  return { identities: identityList, allPermissions, enforce }
 }
