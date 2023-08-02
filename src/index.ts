@@ -64,7 +64,7 @@ export type AllPermissionType<
   : never
 
 export function createPolicy<
-  TPermission extends Permissions,
+  const TPermission extends Permissions,
   TName extends string,
   TRoleKey extends string,
 >({
@@ -88,7 +88,7 @@ export function createIdentity<
   TPermissions extends Permissions,
   TName extends string,
   TRoleKey extends string,
-  TPolicies extends readonly IamPolicyType<TPermissions, TName, TRoleKey>[],
+  const TPolicies extends readonly IamPolicyType<TPermissions, TName, TRoleKey>[],
   TRole extends string,
 >({
   identities,

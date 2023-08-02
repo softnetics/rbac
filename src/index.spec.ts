@@ -13,7 +13,7 @@ test('create role', () => {
       student: ['live-session.read'],
       teacher: ['live-course.update'],
     },
-  } as const)
+  })
 
   const p2 = createPolicy({
     name: 'live-session',
@@ -25,7 +25,7 @@ test('create role', () => {
       student: ['live-course.delete', 'live-session.read'],
       admin: ['live-course.update'],
     },
-  } as const)
+  })
 
   const id = createIdentity({
     policies: [p1, p2],
@@ -35,7 +35,7 @@ test('create role', () => {
       admin: ['live-session.admin', 'live-session.student'],
       enrolled: ['live-course.student', 'live-session.student'],
     },
-  } as const)
+  })
 
   expect(
     id.enforce('admin', ['live-session.live-course.update', 'live-session.live-session.read'])
