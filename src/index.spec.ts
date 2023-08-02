@@ -47,3 +47,27 @@ test('create role', () => {
   // @ts-ignore
   expect(id.enforce('invalid-identity', ['live-course.live-session.update'])).toBe(false)
 })
+
+test('hi', () => {
+  const policy1 = createPolicy({
+    name: 'todo',
+    permissions: {
+      todo: ['create', 'read', 'update', 'delete'],
+      comment: ['create', 'read', 'update'],
+    },
+    roles: {
+      viewer: ['todo.read', 'comment.read'],
+      editor: ['todo.create', 'todo.update', 'comment.create', 'comment.update'],
+    },
+  })
+
+  const identity = createIdentity({
+    policies: [policy1],
+    identities: {
+      student: ['todo.viewer'],
+      teacher: ['todo.editor', 'todo.viewer'],
+    },
+  })
+
+  identity.enforce('student', ['todo.todo.read'])
+})

@@ -97,7 +97,7 @@ export function createIdentity<
   policies: TPolicies
   identities: Record<TRole, readonly AllPolicyType<TPolicies>[]>
 }) {
-  const table: Record<string, Set<string>> = {}
+  const table: Record<string, Record<string, boolean>> = {}
   const allPerm: Record<string, Set<string>> = {}
 
   policies.forEach((policy) => {
@@ -112,12 +112,12 @@ export function createIdentity<
   })
 
   Object.keys(identities).forEach((role) => {
-    table[role] = new Set()
+    table[role] = {}
     identities[role as TRole].forEach((policy) => {
       Object.keys(policy).forEach((_role) => {
         const permissions = allPerm[policy]
         permissions.forEach((permission) => {
-          table[role].add(permission)
+          table[role][permission] = true
         })
       })
     })
@@ -125,7 +125,7 @@ export function createIdentity<
 
   const enforce = (identity: TRole, permissions: readonly AllPermissionType<TPolicies>[]) => {
     return permissions.every((permission) => {
-      return identity in table && table[identity].has(permission)
+      return table[identity] !== undefined && table[identity][permission] === true
     })
   }
 
