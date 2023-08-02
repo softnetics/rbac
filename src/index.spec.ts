@@ -42,4 +42,8 @@ test('create role', () => {
   ).toBe(true)
 
   expect(id.enforce('freemium', ['live-course.live-session.update'])).toBe(false)
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  expect(id.enforce('invalid-identity', ['live-course.live-session.update'])).toBe(false)
 })

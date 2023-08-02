@@ -125,7 +125,7 @@ export function createIdentity<
 
   const enforce = (identity: TRole, permissions: readonly AllPermissionType<TPolicies>[]) => {
     return permissions.every((permission) => {
-      return table[identity].has(permission)
+      return identity in table && table[identity].has(permission)
     })
   }
 
