@@ -1,13 +1,16 @@
 {
-  "name": "@luminate/rbac",
+  "name": "@softnetics/rbac",
   "packageManager": "yarn@3.6.1",
   "main": "./src/index.ts",
   "scripts": {
-    "test": "vitest"
+    "test": "vitest",
+    "build": "tsup src/index.ts --dts"
   },
   "type": "module",
   "types": "./src/index.ts",
   "devDependencies": {
+    "tsup": "^7.1.0",
+    "typescript": "^5.1.6",
     "vitest": "^0.34.1"
   }
 }
