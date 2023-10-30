@@ -22,6 +22,7 @@
     "build": "tsup"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.4.8",
     "tsup": "^7.2.0",
     "typescript": "^5.1.6",
     "vitest": "^0.34.1"
