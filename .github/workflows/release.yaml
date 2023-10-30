@@ -10,3 +10,6 @@ jobs:
     uses: softnetics/workflows/.github/workflows/release-packages.yaml@main
     with:
       before-publish: yarn build
+    secrets:
+      GITHUB_TOKEN: ${{ github.token }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
