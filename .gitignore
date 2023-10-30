@@ -1,4 +1,5 @@
 .yarn/*
 release.sh
+dist
 
 node_modules

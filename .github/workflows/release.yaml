@@ -1,0 +1,12 @@
+name: Test reusable workflows
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  flight-test:
+    uses: softnetics/workflows/.github/workflows/release-packages.yaml@main
+    with:
+      before-publish: yarn build
