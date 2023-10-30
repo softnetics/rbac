@@ -16,6 +16,11 @@
     "type": "git",
     "url": "https://github.com/softnetics/rbac.git"
   },
+  "author": {
+    "name": "peam1146",
+    "email": "supakarin.sn@gmail.com",
+    "url": "https://github.com/peam1146"
+  },
   "license": "Apache-2.0",
   "scripts": {
     "test": "vitest",

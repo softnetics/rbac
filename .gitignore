@@ -1,3 +1,4 @@
 .yarn/*
+release.sh
 
 node_modules
