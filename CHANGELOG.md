@@ -1,5 +1,11 @@
 # @softnetics/rbac
 
+## 1.0.1
+
+### Patch Changes
+
+- [`8ac5fbe`](https://github.com/softnetics/rbac/commit/8ac5fbef50aad720698fd33c8aa2591715d0516b) Thanks [@saenyakorn](https://github.com/saenyakorn)! - Fix empty output source file
+
 ## 1.0.0
 
 ### Major Changes
