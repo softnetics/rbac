@@ -27,7 +27,7 @@ export interface Roles<TPermission extends Permissions> {
 export type IamPolicyType<
   TPermission extends Permissions,
   TName extends string,
-  TRoleKey extends string,
+  TRoleKey extends string
 > = {
   name: TName
   permissions: TPermission
@@ -50,7 +50,7 @@ export type AllPolicyType<TPolicies extends readonly IamPolicyType<Permissions, 
     : never
 
 export type AllPermissionType<
-  TPolicies extends readonly IamPolicyType<Permissions, string, string>[],
+  TPolicies extends readonly IamPolicyType<Permissions, string, string>[]
 > = TPolicies extends readonly [infer TPolicy, ...infer Rest]
   ? TPolicy extends IamPolicyType<Permissions, infer N, string>
     ? Rest extends IamPolicyType<Permissions, string, string>[]
@@ -70,7 +70,7 @@ export type AllPermissionType<
 export function createPolicy<
   const TPermission extends Permissions,
   TName extends string,
-  TRoleKey extends string,
+  TRoleKey extends string
 >({
   name,
   permissions,
@@ -93,7 +93,7 @@ export function createIdentity<
   TName extends string,
   TRoleKey extends string,
   const TPolicies extends readonly IamPolicyType<TPermissions, TName, TRoleKey>[],
-  TRole extends string,
+  TRole extends string
 >({
   identities,
   policies,
@@ -150,5 +150,10 @@ export function createIdentity<
     })
   }
 
-  return { identities: identityList, allPermissions, enforce }
+  const isValidIdentity = (identity: unknown): identity is TRole => {
+    if (typeof identity !== 'string') return false
+    return identity in table
+  }
+
+  return { identities: identityList, allPermissions, enforce, isValidIdentity }
 }
