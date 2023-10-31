@@ -1,5 +1,11 @@
 # @softnetics/rbac
 
+## 1.1.0
+
+### Minor Changes
+
+- [#2](https://github.com/softnetics/rbac/pull/2) [`2e29f8f`](https://github.com/softnetics/rbac/commit/2e29f8f08eb9dcfe488379902c1ead49b8efd0e3) Thanks [@saenyakorn](https://github.com/saenyakorn)! - Add isValidIdentity method for identity type-checking
+
 ## 1.0.1
 
 ### Patch Changes
