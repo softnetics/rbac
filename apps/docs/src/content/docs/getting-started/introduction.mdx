@@ -1,0 +1,67 @@
+---
+title: Introduction
+description: introduction what is Softnetics RBAC.
+---
+
+import { Tabs, TabItem , Code, Aside } from '@astrojs/starlight/components';
+import PolicyExample from '../../code-example/policy?raw';
+import PolicyWithWildcardExample from '../../code-example/policy-with-wildcard?raw';
+import IdentityExample from '../../code-example/identity?raw';
+
+Softnetics RBAC is a role-based access control system that allows you to control access to your application based on user roles and permissions implemented with Lookup Table and Type-safety.
+
+## Quick Start
+
+### Install Dependencies
+
+Install the dependencies with either `pnpm`, `yarn`, or `bun`:
+
+<Tabs syncKey="pkg">
+<TabItem label="pnpm">
+
+```sh
+pnpm add @softnetics/rbac
+```
+
+</TabItem>
+<TabItem label="yarn">
+
+```sh
+yarn add @softnetics/rbac
+```
+
+</TabItem>
+<TabItem label="bun">
+
+```sh
+bun add @softnetics/rbac
+```
+
+</TabItem>
+</Tabs>
+
+### Create a Policy
+
+
+<Code code={PolicyExample} lang="ts" title={'policy.ts'} />
+
+permissions are defined as a map of resource to actions
+roles are defined as a map of role to permissions
+
+<Aside type='tip'>
+You also can use * to match all resources and actions
+<Code code={PolicyWithWildcardExample} lang="ts" />
+</Aside>
+
+### Create identity
+
+<Code code={IdentityExample} lang="ts" title={'identity.ts'} />
+
+### Use RBAC
+
+enforce a permission
+
+```ts
+identity.enforce(['student'], ['todo.todo.read']) // true
+identity.enforce(['student'], ['todo.todo.create']) // false
+```
