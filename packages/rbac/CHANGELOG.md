@@ -1,5 +1,11 @@
 # @softnetics/rbac
 
+## 2.0.0
+
+### Major Changes
+
+- [#4](https://github.com/softnetics/rbac/pull/4) [`2ebfe9d`](https://github.com/softnetics/rbac/commit/2ebfe9d8436bc543cb0563e1a36d8b4482154a7c) Thanks [@peam1146](https://github.com/peam1146)! - Support dynamic fine grain premission
+
 ## 1.1.0
 
 ### Minor Changes

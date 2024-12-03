@@ -1,6 +1,6 @@
 {
   "name": "@softnetics/rbac",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "O(1) type safe role based access control",
   "packageManager": "yarn@1.22.19",
   "main": "./dist/index.cjs",
