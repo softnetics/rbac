@@ -1,52 +1,27 @@
 {
-  "name": "@softnetics/rbac",
-  "version": "1.1.0",
-  "description": "O(1) type safe role based access control",
-  "packageManager": "yarn@1.22.19",
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "type": "module",
-  "homepage": "https://github.com/softnetics/rbac",
-  "bugs": {
-    "url": "https://github.com/softnetics/rbac/issues",
-    "email": "project@hostname.com"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/softnetics/rbac.git"
-  },
-  "author": {
-    "name": "peam1146",
-    "email": "supakarin.sn@gmail.com",
-    "url": "https://github.com/peam1146"
-  },
-  "license": "Apache-2.0",
+  "name": "softnetics-auth",
+  "private": true,
   "scripts": {
-    "test": "vitest",
-    "build": "tsup"
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "format": "prettier --write \"**/*.{ts,tsx,md}\""
   },
   "devDependencies": {
-    "@changesets/changelog-github": "^0.4.8",
-    "tsup": "^7.2.0",
-    "typescript": "^5.1.6",
-    "vitest": "^0.34.1"
+    "@softnetics/project-config": "workspace:^",
+    "@changesets/changelog-github": "^0.5.0",
+    "@changesets/cli": "^2.27.7",
+    "prettier": "^3.2.5",
+    "eslint": "^9.9.0",
+    "turbo": "^2.3.3",
+    "typescript": "5.5.4"
   },
-  "files": [
-    "dist"
-  ],
-  "keywords": [
-    "rbac",
-    "typescript",
-    "type-safe"
-  ],
-  "contributors": [
-    {
-      "name": "peam1146",
-      "email": "supakarin.sn@gmail.com"
-    }
-  ],
   "engines": {
-    "node": ">=20"
-  }
+    "node": ">=18"
+  },
+  "packageManager": "bun@1.1.34",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ]
 }

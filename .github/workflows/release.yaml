@@ -24,6 +24,7 @@ jobs:
   release:
     uses: softnetics/workflows/.github/workflows/release-packages.yaml@main
     with:
-      before-publish: yarn build
+      before-publish: bun
+      release-mode: tag
     secrets:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

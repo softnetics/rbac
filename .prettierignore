@@ -1,5 +1,8 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+pnpm-lock.yaml
+.changeset/**.md
 
+
+packages/bff-client/src/openapi.yaml
 # Dependencies
 node_modules
 .pnp
@@ -17,6 +20,7 @@ coverage
 
 # Turbo
 .turbo
+.linear
 
 # Vercel
 .vercel
@@ -26,6 +30,8 @@ coverage
 out/
 build
 dist
+tmp
+.goreload
 
 
 # Debug

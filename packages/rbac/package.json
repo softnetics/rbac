@@ -1,0 +1,54 @@
+{
+  "name": "@softnetics/rbac",
+  "version": "1.1.0",
+  "description": "O(1) type safe role based access control",
+  "packageManager": "yarn@1.22.19",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "type": "module",
+  "homepage": "https://github.com/softnetics/rbac",
+  "bugs": {
+    "url": "https://github.com/softnetics/rbac/issues",
+    "email": "project@hostname.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/softnetics/rbac.git"
+  },
+  "author": {
+    "name": "peam1146",
+    "email": "supakarin.sn@gmail.com",
+    "url": "https://github.com/peam1146"
+  },
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "vitest run",
+    "build": "tsup"
+  },
+  "devDependencies": {
+    "tsup": "^7.2.0",
+    "typescript": "^5.1.6",
+    "vitest": "^0.34.1"
+  },
+  "files": [
+    "dist"
+  ],
+  "keywords": [
+    "rbac",
+    "typescript",
+    "type-safe"
+  ],
+  "contributors": [
+    {
+      "name": "peam1146",
+      "email": "supakarin.sn@gmail.com"
+    }
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "remeda": "^2.17.0"
+  }
+}
