@@ -1,88 +1,212 @@
-import { describe, expect, test } from 'vitest'
+import { afterEach, describe, expect, it, vi } from "vitest";
 
-import { createIdentity, createPolicy } from '.'
+import { createIdentity, createPermissionsGroup, createPolicy } from ".";
 
-describe('create role', () => {
-  describe('single policy', () => {
-    const p1 = createPolicy({
-      name: 'todo',
+describe("rbac", () => {
+  afterEach(() => {
+    vi.resetAllMocks();
+  });
+
+  const policy1 = createPolicy({
+    name: "hmp",
+    permissions: {
+      inventory: ["read", "write"],
+      dashboard: ["read", "create"],
+    },
+  });
+  const policy2 = createPolicy({
+    name: "road",
+    permissions: {
+      inventory: ["read", "write"],
+      dashboard: ["read", "create"],
+    },
+  });
+
+  const group1 = createPermissionsGroup({
+    name: "hmp",
+    policies: [policy1],
+    groups: {
+      admin: ["hmp.inventory.write", "hmp.inventory.read"],
+    },
+  });
+
+  const group2 = createPermissionsGroup({
+    name: "road",
+    policies: [policy1, policy2],
+    groups: {
+      admin: ["road.inventory.write", "road.inventory.read"],
+      creator: ["hmp.dashboard.read", "road.inventory.read"],
+    },
+  });
+
+  it("enforce should be defined", ({ expect }) => {
+    const id = createIdentity({
+      permissionGroups: { group1, group2 },
+    });
+    expect(id.enforce).toBeDefined();
+  });
+
+  describe("with mock store", () => {
+    const policy1 = createPolicy({
+      name: "hmp",
       permissions: {
-        todo: ['create', 'read', 'update', 'delete'],
-        comment: ['create', 'read', 'delete'],
+        inventory: ["read", "write"],
+        dashboard: ["read", "create"],
       },
-      roles: {
-        viewer: ['todo.read', 'comment.read'],
-        editor: ['todo.*', 'comment.delete'],
-        admin: '*',
+    });
+
+    const policy2 = createPolicy({
+      name: "road",
+      permissions: {
+        inventory: ["read", "write"],
+        dashboard: ["read", "create"],
       },
-    })
+    });
+
+    const group1 = createPermissionsGroup({
+      name: "hmp",
+      policies: [policy1],
+      groups: {
+        admin: [
+          "hmp.inventory.write",
+          "hmp.inventory.read",
+          "hmp.dashboard.read",
+          "hmp.dashboard.create",
+        ],
+        creator: ["hmp.dashboard.read", "hmp.inventory.read"],
+      },
+    });
+
+    const group2 = createPermissionsGroup({
+      name: "road",
+      policies: [policy1, policy2],
+      groups: {
+        admin: [
+          "road.inventory.write",
+          "road.inventory.read",
+          "road.dashboard.read",
+          "road.dashboard.create",
+        ],
+        creator: ["hmp.dashboard.read", "road.inventory.read"],
+      },
+    });
 
     const id = createIdentity({
-      policies: [p1],
-      identities: {
-        viewer: ['todo.viewer'],
-        editor: ['todo.editor'],
-        admin: ['todo.admin'],
+      permissionGroups: { group1, group2 },
+    });
+
+    describe("admin", () => {
+      it("should have all permissions", async ({ expect }) => {
+        expect(
+          await id.enforce(
+            ["hmp.admin", "hmp.creator", "road.admin", "road.creator"],
+            [
+              "road.dashboard.read",
+              "road.dashboard.create",
+              "road.inventory.read",
+              "road.inventory.write",
+              "hmp.inventory.write",
+              "hmp.inventory.read",
+              "hmp.dashboard.read",
+              "hmp.dashboard.create",
+            ]
+          )
+        ).toMatchObject({ allGranted: true });
+      });
+    });
+
+    describe("user", () => {
+      it("should have user permissions", async ({ expect }) => {
+        expect(
+          await id.enforce(
+            ["hmp.creator", "road.creator"],
+            ["hmp.inventory.read", "road.inventory.read", "hmp.dashboard.read"]
+          )
+        ).toMatchObject({ allGranted: true });
+      });
+
+      describe("should not have some permissions", async () => {
+        it("some of permissions");
+        expect(
+          await id.enforce(
+            ["road.creator", "hmp.creator"],
+            [
+              "road.dashboard.read",
+              "road.dashboard.create",
+              "road.inventory.write",
+              "hmp.inventory.read",
+              "hmp.dashboard.create",
+            ]
+          )
+        ).toMatchObject({ allGranted: false });
+        expect(
+          await id.enforce(["hmp.admin"], ["road.dashboard.read"])
+        ).toMatchObject({
+          allGranted: false,
+        });
+      });
+    });
+  });
+
+  describe("wildcard", () => {
+    const policy1 = createPolicy({
+      name: "hmp",
+      permissions: {
+        inventory: ["read", "write"],
+        dashboard: ["read", "create"],
       },
-    })
+    });
 
-    describe('viewer', () => {
-      test('viewer can read todo', () => {
-        expect(id.enforce('viewer', ['todo.todo.read'])).toBe(true)
-      })
+    const policy2 = createPolicy({
+      name: "road",
+      permissions: {
+        inventory: ["read", "write"],
+        dashboard: ["read", "create"],
+      },
+    });
 
-      test('viewer can read comment', () => {
-        expect(id.enforce('viewer', ['todo.comment.read'])).toBe(true)
-      })
+    const group1 = createPermissionsGroup({
+      name: "hmp",
+      policies: [policy1, policy2],
+      groups: {
+        admin: ["hmp.*", "road.dashboard.*"],
+      },
+    });
 
-      test('viewer cannot create todo', () => {
-        expect(id.enforce('viewer', ['todo.todo.create'])).toBe(false)
-      })
+    const id = createIdentity({
+      permissionGroups: { group1 },
+    });
 
-      test('viewer cannot create comment', () => {
-        expect(id.enforce('viewer', ['todo.comment.create'])).toBe(false)
-      })
-    })
+    it("should have permissions", async ({ expect }) => {
+      expect(
+        await id.enforce(
+          ["hmp.admin"],
+          [
+            "hmp.inventory.read",
+            "hmp.inventory.write",
+            "hmp.dashboard.read",
+            "hmp.dashboard.create",
+            "road.dashboard.read",
+            "road.dashboard.create",
+          ]
+        )
+      ).toMatchObject({ allGranted: true });
+    });
 
-    describe('editor', () => {
-      test('editor has all todo permissions', () => {
-        expect(
-          id.enforce('editor', [
-            'todo.todo.create',
-            'todo.comment.delete',
-            'todo.todo.read',
-            'todo.todo.update',
-          ])
-        ).toBe(true)
-      })
-
-      test('editor cannot create comment', () => {
-        expect(id.enforce('editor', ['todo.comment.create'])).toBe(false)
-      })
-    })
-
-    describe('admin', () => {
-      test('admin has all permissions', () => {
-        expect(
-          id.enforce('admin', [
-            'todo.todo.create',
-            'todo.todo.read',
-            'todo.todo.update',
-            'todo.todo.delete',
-            'todo.comment.create',
-            'todo.comment.read',
-            'todo.comment.delete',
-          ])
-        ).toBe(true)
-      })
-    })
-
-    describe('invalid identity', () => {
-      test('invalid identity cannot read todo', () => {
-        // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-        // @ts-ignore
-        expect(id.enforce('invalid-identity', ['todo.todo.read'])).toBe(false)
-      })
-    })
-  })
-})
+    it("should not have permissions", async ({ expect }) => {
+      expect(
+        await id.enforce(
+          ["hmp.admin"],
+          [
+            "hmp.inventory.read",
+            "hmp.inventory.write",
+            "hmp.dashboard.read",
+            "hmp.dashboard.create",
+            "road.inventory.read",
+            "road.inventory.write",
+          ]
+        )
+      ).toMatchObject({ allGranted: false });
+    });
+  });
+});
