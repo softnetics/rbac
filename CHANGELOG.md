@@ -1,5 +1,11 @@
 # @softnetics/rbac
 
+## 1.1.1
+
+### Patch Changes
+
+- [#7](https://github.com/softnetics/rbac/pull/7) [`3490a1a0ab834c33beeefef255f2cb21ac7526a5`](https://github.com/softnetics/rbac/commit/3490a1a0ab834c33beeefef255f2cb21ac7526a5) Thanks [@saenyakorn](https://github.com/saenyakorn)! - Fix library entrypoint
+
 ## 1.1.0
 
 ### Minor Changes
