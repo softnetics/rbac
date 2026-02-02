@@ -1,5 +1,15 @@
 # @softnetics/rbac
 
+## 2.0.0
+
+### Major Changes
+
+- [#4](https://github.com/softnetics/rbac/pull/4) [`2ebfe9d`](https://github.com/softnetics/rbac/commit/2ebfe9d8436bc543cb0563e1a36d8b4482154a7c) Thanks [@peam1146](https://github.com/peam1146)! - Support dynamic fine grain premission
+
+### Patch Changes
+
+- [#6](https://github.com/softnetics/rbac/pull/6) [`7aed27a`](https://github.com/softnetics/rbac/commit/7aed27a143fa1fb4a3003e7bbcfd31ec541615ef) Thanks [@saenyakorn](https://github.com/saenyakorn)! - fix library entry point
+
 ## 1.1.0
 
 ### Minor Changes
